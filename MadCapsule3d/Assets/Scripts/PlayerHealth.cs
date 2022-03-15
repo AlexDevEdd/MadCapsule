@@ -8,11 +8,13 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int _health = 5;
     [SerializeField] private int _maxHealth = 8;
+    [SerializeField] private AudioSource _takeDamegeSound;
+    [SerializeField] private AudioSource _addHealthSound;
 
     private bool _invulnerable = false;
     public async void TakeDamage(int damageValue)
     {
-        if (_invulnerable)
+        if (!_invulnerable)
         {
             _health -= damageValue;
             if (_health <= 0)
@@ -22,7 +24,7 @@ public class PlayerHealth : MonoBehaviour
             }
 
             StopInvulnerable(true);
-
+            _takeDamegeSound.Play();
             await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
             StopInvulnerable(false);
         }
@@ -40,6 +42,7 @@ public class PlayerHealth : MonoBehaviour
         if (_health > _maxHealth)
             _health = _maxHealth;
 
+        _addHealthSound.Play();
     }
     private void Die()
     {
